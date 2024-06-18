@@ -13,10 +13,45 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\EasyxTools">
+      <UniqueIdentifier>{e68f6942-c9a5-4f08-bb2b-9b75504277c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\EasyxTools">
+      <UniqueIdentifier>{7703700c-d13b-4fff-95f1-1973156a73fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="c_学生信息管理系统_2024_6_17_10点52分.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>源文件\EasyxTools</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicWidget.cpp">
+      <Filter>源文件\EasyxTools</Filter>
+    </ClCompile>
+    <ClCompile Include="PushButton.cpp">
+      <Filter>源文件\EasyxTools</Filter>
+    </ClCompile>
+    <ClCompile Include="Management.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Management.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>头文件\EasyxTools</Filter>
+    </ClInclude>
+    <ClInclude Include="Configure.h">
+      <Filter>头文件\EasyxTools</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicWidget.h">
+      <Filter>头文件\EasyxTools</Filter>
+    </ClInclude>
+    <ClInclude Include="PushButton.h">
+      <Filter>头文件\EasyxTools</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
