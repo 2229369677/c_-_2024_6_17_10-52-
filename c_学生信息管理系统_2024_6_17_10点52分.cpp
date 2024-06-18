@@ -19,13 +19,16 @@
 
 #include"Management.h"
 #include"Window.h"
+#include <graphics.h> // 引入EasyX的头文件
+#include <conio.h>    // 引入控制台输入输出头文件
 
 int main() {
 	Window w(960,640,EX_SHOWCONSOLE);
 	w.setWindowTilte("学生信息管理系统");
-
 	Management m;
 	m.run();
+
+	
 
 	return w.exec();
 }

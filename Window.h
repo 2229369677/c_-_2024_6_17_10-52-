@@ -15,7 +15,7 @@ public:
 	static void endDraw();
 
 	//按键操作喝鼠标操作
-	inline static bool hasMsg() { return peekmessage(&m_msg, EX_MOUSE | EX_KEY); }
+	inline static bool hasMsg() { return peekmessage(&m_msg); }
 	inline static const ExMessage& getMsg() { return m_msg; }
 private:
 	HWND m_handle;//窗口句柄

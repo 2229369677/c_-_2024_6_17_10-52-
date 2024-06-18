@@ -2,6 +2,9 @@
 #include"Window.h"
 #include"PushButton.h"
 #include<vector>
+#include"Student.h"
+#include<fstream>
+#include<sstream>
 class Management
 {
 	enum Operator
@@ -33,9 +36,15 @@ public:
 
 	void drawBackGroud();
 	void enevtLoop();//事件循环
+
+	void readFile(const std::string & fileName);//读文件
+	void saveFile(const std::string& fileName);//写文件
 private:
 	IMAGE m_bk;
 	ExMessage m_msg;
 	std::vector<PushButton*> menu_btns;
+private:
+	std::string m_header;//保存学生信息
+	std::vector<Student> vec_stu;
 };
 

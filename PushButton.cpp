@@ -22,7 +22,7 @@ void PushButton::show()
 bool PushButton::isin()
 {
     //鼠标点是否在矩形内
-    if (m_msg.x >= m_x && m_msg.x < m_x + m_w&&m_msg.y>=m_y&&m_msg.y<m_y+m_h)
+    if (m_msg.x >= m_x && m_msg.x < m_x + m_w && m_msg.y >= m_y && m_msg.y < m_y + m_h)
     {
         return true;
     }
@@ -63,5 +63,15 @@ void PushButton::eventLoop(const ExMessage& msg)
     {
         cur_c = hover_c;
     }
+}
+
+void PushButton::setBackgroundColor(COLORREF c)
+{
+    normal_c = c;
+}
+
+void PushButton::setHoverColor(COLORREF c)
+{
+    hover_c = c;
 }
 

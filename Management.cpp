@@ -2,9 +2,9 @@
 #include<conio.h>
 #include<iostream>
 
-
 Management::Management()
 {
+	readFile("./images/student.txt");
 	//主界面背景图初始化
 	::loadimage(&m_bk, "./images/10002.jpg", Window::width(), Window::height());
 	//主界面按钮初始化
@@ -77,6 +77,7 @@ void Management::run()
 			search();
 			break;
 		default:
+			saveFile("./images/text.txt");//退出保存文件
 			exit(666);
 			break;
 		}
@@ -137,4 +138,59 @@ void Management::drawBackGroud()
 void Management::enevtLoop()
 {
 
+}
+
+void Management::readFile(const std::string& fileName)
+{
+	std::fstream read(fileName, std::ios::in);
+	if (!read.is_open())
+	{
+		return;
+	}
+	else
+	{
+		{//读取表头
+			char buf[1024] = { 0 };
+			read.getline(buf, 1024);//读一行
+			m_header = buf;
+			//std::cout << buf << std::endl;
+		}
+		{//读取数据
+			while (!read.eof())
+			{
+				char buf[1024] = { 0 };
+				read.getline(buf, 1024);
+
+				Student stu;
+				std::stringstream ss(buf);
+				ss >> stu.id >> stu.name >> stu.age >> stu.gender >> stu.date_of_birth >> stu.address >> stu.phone >> stu.email;
+				vec_stu.push_back(stu);
+				//std::cout << stu.id << stu.name << stu.age << stu.gender << stu.date_of_birth << stu.address << stu.phone << stu.email << std::endl;
+			}
+		}
+	}
+	read.close();
+}
+
+void Management::saveFile(const std::string& fileName)
+{
+	std::fstream write(fileName, std::ios::out | std::ios::trunc);
+	if (!write.is_open())
+	{
+		std::cerr << fileName << "文件打开失败" << std::endl;
+		return;
+	}
+	else
+	{
+		//写表头
+		m_header;
+		write.write(m_header.c_str(), m_header.size());
+		//写数据
+		for (auto& val : vec_stu)
+		{
+			std::string temp = val.formatInfo();
+			write.write(temp.c_str(), temp.size());
+		}
+	}
+	write.close();
 }

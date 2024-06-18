@@ -13,9 +13,11 @@ public:
 
     //检测消息函数
     void eventLoop(const ExMessage& msg);
+
+    void setBackgroundColor(COLORREF c);
+    void setHoverColor(COLORREF c);
 private:
     std::string m_text;
-
     ExMessage m_msg;//接受消息
 private:
     COLORREF cur_c = RGB(2, 46, 91);
