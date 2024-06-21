@@ -24,6 +24,11 @@
 
 
 int main() {
+
+	HWND hWnd = GetConsoleWindow();
+	ShowWindow(hWnd, SW_HIDE);
+	//程序运行至此处后，控制台窗口就会隐藏
+
 	Window w(960,640,EX_SHOWCONSOLE);
 	w.setWindowTilte("学生信息管理系统");
 	Management m;
