@@ -130,17 +130,21 @@
   <ItemGroup>
     <ClCompile Include="BasicWidget.cpp" />
     <ClCompile Include="c_学生信息管理系统_2024_6_17_10点52分.cpp" />
+    <ClCompile Include="lineEdit.cpp" />
     <ClCompile Include="Management.cpp" />
     <ClCompile Include="PushButton.cpp" />
     <ClCompile Include="Student.cpp" />
+    <ClCompile Include="Table.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicWidget.h" />
     <ClInclude Include="Configure.h" />
+    <ClInclude Include="lineEdit.h" />
     <ClInclude Include="Management.h" />
     <ClInclude Include="PushButton.h" />
     <ClInclude Include="Student.h" />
+    <ClInclude Include="Table.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

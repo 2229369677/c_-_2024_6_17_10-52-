@@ -3,6 +3,7 @@ class BasicWidget
 {
 public:
 	BasicWidget(int x, int y, int w,int h);
+	virtual ~BasicWidget() {};
 	int width();
 	int height();
 	void setFixedSize(int w, int h);

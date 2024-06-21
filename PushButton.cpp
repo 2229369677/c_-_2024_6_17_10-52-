@@ -12,11 +12,16 @@ void PushButton::show()
     ::fillroundrect(m_x, m_y, m_x + m_w, m_y + m_h, 10, 10);
 
     settextcolor(RGB(238, 238, 242));
+    settextstyle(20, 0, "ËÎÌו");
     int tx =m_x+ (m_w-textwidth(m_text.c_str()))/2;
     int ty = m_y+(m_h-textheight(m_text.c_str()))/2;
-
+    
     outtextxy(tx, ty, m_text.c_str());
+}
 
+std::string PushButton::gettext()
+{
+    return m_text;
 }
 
 bool PushButton::isin()
@@ -73,5 +78,10 @@ void PushButton::setBackgroundColor(COLORREF c)
 void PushButton::setHoverColor(COLORREF c)
 {
     hover_c = c;
+}
+
+void PushButton::correction()
+{
+    m_msg.message = 0;
 }
 
