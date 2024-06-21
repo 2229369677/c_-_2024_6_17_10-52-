@@ -65,5 +65,8 @@ private:
 
 	std::unique_ptr<PushButton> m_modifyBtn;//修改学生按钮
 	std::unique_ptr<lineEdit> m_modifyEdit;//修改学生窗口
+
+	std::unique_ptr<PushButton> m_sortBtn_id;//排序学生按钮
+	std::unique_ptr<PushButton> m_sortBtn_name;//排序学生按钮
 };
 

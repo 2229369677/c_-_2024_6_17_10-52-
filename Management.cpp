@@ -67,6 +67,10 @@ Management::Management()
 	//修改学生窗口
 	m_modifyEdit.reset(new lineEdit(""));
 	m_modifyEdit->setTitle("请输入学生学号或姓名");
+
+	//排序
+	m_sortBtn_id.reset(new PushButton("按学号排序", 850,0 ,100,20));
+	m_sortBtn_name.reset(new PushButton("按姓名排序", 850, 20,100,20));
 }
 
 void Management::run()
@@ -148,8 +152,34 @@ void Management::display()
 	const char str[] = {"学生信息"};
 	settextstyle(30, 0, "宋体");
 	outtextxy((Window::width() - textwidth(str)) / 2, 20, str);
-	m_showTable->drawHeader();
-	m_showTable->show();
+	m_sortBtn_id->show();//按钮显示
+	m_sortBtn_name->show();
+	if (m_sortBtn_id->isClicked())//按学号排序按钮响应
+	{
+		std::sort(vec_stu.begin(), vec_stu.end(), [](const Student& stu1, const Student& sut2)
+			{
+				return stu1.id < sut2.id;
+			});
+		m_showTable->clean_data();
+		for (auto& val : vec_stu)
+		{
+			m_showTable->insertData(val.formatInfo());
+		}
+	}
+	if (m_sortBtn_name->isClicked())//按姓名排序按钮响应
+	{
+		std::sort(vec_stu.begin(), vec_stu.end(), [](const Student& stu1, const Student& sut2)
+			{
+				return stu1.name < sut2.name;
+			});
+		m_showTable->clean_data();
+		for (auto& val : vec_stu)
+		{
+			m_showTable->insertData(val.formatInfo());
+		}
+	}
+	m_showTable->drawHeader();//头表显示
+	m_showTable->show();//表格和数据显示，内还有翻页按钮实现
 }
 
 void Management::add()
@@ -157,12 +187,12 @@ void Management::add()
 	const char str[] = { "<请输入: 学号 姓名 年龄 性别 出生年月 地址 电话 E - mail>" };
 	settextstyle(25, 0, "宋体");
 	outtextxy((Window::width() - textwidth(str)) / 2, 130, str);
-	m_addEdit->show();
-	m_addBtn->show();
-	if (m_addBtn->isClicked()&&!m_addEdit->text().empty())
+	m_addEdit->show();//输入框显示
+	m_addBtn->show();//按钮显示
+	if (m_addBtn->isClicked()&&!m_addEdit->text().empty())//按钮消息响应（为防止空白输入，对输入框的字符串限制）
 	{
-		vec_stu.push_back(Student::fromstring(m_addEdit->text()));
-		std::string tempstr;//加个’\t'
+		vec_stu.push_back(Student::fromstring(m_addEdit->text()));//加入储存的数组中
+		std::string tempstr;//加个’\t'//对字符串处理
 		{
 			tempstr +=
 				vec_stu.back().id += '\t';tempstr +=
@@ -174,29 +204,30 @@ void Management::add()
 				vec_stu.back().phone ;tempstr +='\t';tempstr +=
 				vec_stu.back().email; tempstr += '\t';
 		}
-		m_showTable->insertData(tempstr);
-		m_addEdit->clean();//重置
-		m_addBtn->correction();
+		m_showTable->insertData(tempstr);//添加展示表格的储存信息中
+		m_addEdit->clean();//重置输入框文本，起到添加成功的提示作用和，添加内容提示作用
+		m_addBtn->correction();//防止持续输入，将按钮消息重置为0;
 	}
 }
 
 void Management::erase()
 {
-	const std::string str[] = {"<请输入要删除的学生: 学号>"};
+	const std::string str[] = {"<请输入要删除的学生: 学号>"};//学号唯一，防止误删
 	settextstyle(25, 0, "宋体");
 	outtextxy((Window::width() - textwidth(str->data())) / 2, 130, str->data());
-	m_eraseEdit->show();
-	m_eraseBtn->show();
+	m_eraseEdit->show();//输入框显示
+	m_eraseBtn->show();//按钮显示
 
-	auto & tempstr = m_eraseEdit->text();
+	auto & tempstr = m_eraseEdit->text();//储存输入信息，用带进行查找
 
-	if (!str->empty())
+	if (!str->empty())//不为空则进行查找，防止空白查找
 	{
+		//使用了内置find_if函数进行学号查找
 		auto it = std::find_if(vec_stu.begin(), vec_stu.end(), [&](const Student& stu)
 			{
 				return stu.id == tempstr;
 			});
-		if (it == vec_stu.end())
+		if (it == vec_stu.end())//判断是否找到，对查找操作提示
 		{
 			settextstyle(16, 0, "宋体");
 			outtextxy((Window::width() - textwidth(str->data())) / 2, 250, "没找到该学生");
@@ -205,10 +236,12 @@ void Management::erase()
 		{
 			settextstyle(16, 0, "宋体");
 			outtextxy((Window::width() - textwidth(str->data())) / 2, 250, (it->formatInfo().data()));
-			m_eraseEdit->correction();
-			m_eraseBtn->eventLoop(m_msg);
-			if (m_eraseBtn->isClicked())
+			m_eraseEdit->correction();//输入消息修正，防止消息队列的消息，造成错误
+			m_eraseBtn->eventLoop(m_msg);//读入消息
+			if (m_eraseBtn->isClicked())//删除操作响应
 			{
+				//交货操作，将查找到要删除的学生后面的学生信息都向前移动一位，后将最后一个学生信息删除，
+				//就完成了删除操作
 				decltype(it) temp = it;
 				decltype(it) it_del = it;
 				for (it_del = it + 1; it_del != vec_stu.end(); it_del++)
@@ -217,16 +250,18 @@ void Management::erase()
 					temp = it_del;
 				}
 				
-				if (it_del == vec_stu.end())
+				if (it_del == vec_stu.end())//对删除操作提示
 				{
 					HWND hnd = GetHWnd();
 					MessageBox(hnd, "删除成功", "提示", MB_OKCANCEL);
 					vec_stu.pop_back();
-					//重新初始化一下表格数据
-					m_showTable->clean_data();
-					for (auto& val : vec_stu)
+					//重新初始化一下表格数据，以实时更新
 					{
-						m_showTable->insertData(val.formatInfo());
+						m_showTable->clean_data();
+						for (auto& val : vec_stu)
+						{
+							m_showTable->insertData(val.formatInfo());
+						}
 					}
 				}
 				else
@@ -247,15 +282,16 @@ void Management::modify()
 	m_modifyEdit->show();
 	m_modifyBtn->show();
 
-	auto& tempstr = m_modifyEdit->text();
+	auto& tempstr = m_modifyEdit->text();//储存输入的学号，来进行查找操作
 
-	if (!str->empty())
+	if (!str->empty())//判断不为空
 	{
+		//内置查找
 		auto it = std::find_if(vec_stu.begin(), vec_stu.end(), [&](const Student& stu)
 			{
 				return stu.id == tempstr;
 			});
-		if (it == vec_stu.end())
+		if (it == vec_stu.end())//查找操作，提示信息
 		{
 			settextstyle(16, 0, "宋体");
 			outtextxy((Window::width() - textwidth(str->data())) / 2, 250, "没找到该学生");
@@ -264,23 +300,23 @@ void Management::modify()
 		{
 			settextstyle(16, 0, "宋体");
 			outtextxy((Window::width() - textwidth(str->data())) / 2, 250, (it->formatInfo().data()));
-			m_modifyEdit->correction();
+			m_modifyEdit->correction();//刷新消息
 			m_modifyBtn->eventLoop(m_msg);
-			if (m_modifyBtn->isClicked())
+			if (m_modifyBtn->isClicked())//修改操作
 			{
 				//点击弹出对话框
-				std::string temp_text;
+				std::string temp_text;//储存修改数据
 				if (m_modifyBtn->isClicked())
 				{
 					char buf[200];
 					InputBox(buf, 200, "请要修改的内容: 学号 姓名 年龄 性别 出生年月 地址 电话 E - mail", "输入框");
 					temp_text = buf;
 				}
-				*it = Student::fromstring(temp_text);
+				*it = Student::fromstring(temp_text);//数值赋值
 				HWND hnd = GetHWnd();
-				MessageBox(hnd, "修改成功", "提示", MB_OKCANCEL);
+				MessageBox(hnd, "修改成功", "提示", MB_OKCANCEL);//修改提示信息
 
-				//重新初始化一下表格数据
+				//重新初始化一下表格数据，以实时数据更新
 				m_showTable->clean_data();
 				for (auto& val : vec_stu)
 				{
@@ -307,6 +343,7 @@ void Management::search()
 		{
 			if (i.id == m_searchEdit->text() || i.name == m_searchEdit->text())
 			{
+				//在学生类种写过了转字符串函数，但在这里直接复制粘贴了add()里面的代码
 				{
 					tempstr +=
 						i.id += ' '; tempstr +=
@@ -322,7 +359,7 @@ void Management::search()
 			}
 		}
 		HWND hnd = GetHWnd();
-		if (is)
+		if (is)//查找提示信息
 		{
 			MessageBox(hnd,tempstr.data(), "学生信息", MB_OKCANCEL);
 		}
@@ -351,6 +388,8 @@ void Management::enevtLoop()
 	m_eraseEdit->eventLoop(m_msg);
 	m_modifyBtn->eventLoop(m_msg);
 	m_modifyEdit->eventLoop(m_msg);
+	m_sortBtn_id->eventLoop(m_msg);
+	m_sortBtn_name->eventLoop(m_msg);
 }
 
 void Management::readFile(const std::string& fileName)
